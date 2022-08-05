@@ -20,3 +20,9 @@
 
 |Assumption|
 |----|
+
+```
+a) qemu-kvm and libvirtd packages are installed the services are running fine on the baremetal node aka physical node. 
+b) docker is also running fine on the baremetla node. 
+```
+
