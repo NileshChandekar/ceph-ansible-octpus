@@ -47,3 +47,25 @@ TriggeredBy: ● docker.socket
        Docs: https://docs.docker.com
    Main PID: 206421 (dockerd)
 ```
+
+|Node Creation|
+|----|
+
+a) run bellow [script link]()
+b) this will create mon and osd nodes, along with secondary disk 1 each to all osd nodes. 
+c) once the script is over you will below output like- 
+```
+192.168.122.78     root-ceph-0
+192.168.122.51     root-ceph-1
+192.168.122.41     root-ceph-2
+```
+d) then run [script link]()
+e) once the script executed, you will automatically get inside to container, 
+f) script will copy hostentry from above script and copy inside container. 
+g) this will create a ansible container [2.9] with prebuild ceph ansible repository [octopus]
+```
+(venv) root@afa1ddea1425:/usr/share/ceph-ansible# git branch
+  main
+* stable-5.0
+(venv) root@afa1ddea1425:/usr/share/ceph-ansible# 
+```
