@@ -69,3 +69,5 @@ g) this will create a ansible container [2.9] with prebuild ceph ansible reposit
 * stable-5.0
 (venv) root@afa1ddea1425:/usr/share/ceph-ansible# 
 ```
+
+
