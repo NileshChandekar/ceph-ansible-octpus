@@ -26,10 +26,13 @@ a) qemu-kvm and libvirtd packages are installed the services are running fine on
 b) docker is also running fine on the baremetla node. 
 c) my libvirt images are stored in ``/openstack/images``
 ```
+
+```
 # ls -lhrt /var/lib/libvirt/images
 lrwxrwxrwx 1 root root 17 Jul 22 10:58 /var/lib/libvirt/images -> /openstack/images
 root@617579-logging01:/openstack/images/deployceph# 
 ```
+
 ```
 # systemctl status libvirtd -l 
 ● libvirtd.service - Virtualization daemon
