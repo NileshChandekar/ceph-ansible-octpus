@@ -24,8 +24,12 @@
 ```
 a) qemu-kvm and libvirtd packages are installed the services are running fine on the baremetal node aka physical node. 
 b) docker is also running fine on the baremetla node. 
+c) my libvirt images are stored in ``/openstack/images``
 ```
-
+# ls -lhrt /var/lib/libvirt/images
+lrwxrwxrwx 1 root root 17 Jul 22 10:58 /var/lib/libvirt/images -> /openstack/images
+root@617579-logging01:/openstack/images/deployceph# 
+```
 ```
 # systemctl status libvirtd -l 
 ● libvirtd.service - Virtualization daemon
@@ -51,7 +55,7 @@ TriggeredBy: ● docker.socket
 |Node Creation|
 |----|
 
-a) run bellow [script link]()
+a) run bellow [script link]() \n
 b) this will create mon and osd nodes, along with secondary disk 1 each to all osd nodes. 
 c) once the script is over you will below output like- 
 ```
@@ -69,5 +73,6 @@ g) this will create a ansible container [2.9] with prebuild ceph ansible reposit
 * stable-5.0
 (venv) root@afa1ddea1425:/usr/share/ceph-ansible# 
 ```
+h) Inside the container run the [script link]()
 
 
