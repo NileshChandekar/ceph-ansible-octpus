@@ -55,7 +55,7 @@ TriggeredBy: ● docker.socket
 |Node Creation|
 |----|
 
-a) run bellow [script link]() \n
+a) run bellow [script link](https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/scripts/ceph_infra_setup.sh)
 b) this will create mon and osd nodes, along with secondary disk 1 each to all osd nodes. 
 c) once the script is over you will below output like- 
 ```
