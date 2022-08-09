@@ -99,7 +99,8 @@ i) Once the above execution completed, that means your Nodes Infra is ready and 
 
 ```
 user=$(id | awk '{print $1}' | sed 's/.*(//;s/)$//')
-for spawn in $( sudo docker ps | grep -i $user | grep -i deploy | awk {'print $1'} ) ; do sudo docker exec -it -u root $spawn bash ; done
+for spawn in $( sudo docker ps | grep -i $user | grep -i deploy | awk {'print $1'} ) ; \
+do sudo docker exec -it -u root $spawn bash ; done
 ```
 
 * Activate virtual env. 
