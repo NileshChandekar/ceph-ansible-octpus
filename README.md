@@ -263,26 +263,33 @@ ceph-config : look up for ceph-volume rejected devices -------------------------
 ```
 
 ```
-[root@localhost ~]# ceph -s
+for i in $(ceph df | awk {'print $1'} | awk "NR > 7") ; do ceph osd pool set $i size 1; done
+```
+
+```
+ceph health mute  POOL_NO_REDUNDANCY
+```
+
+
+```
+[root@localhost ~]# ceph -s 
   cluster:
-    id:     dc7ad8fb-0b14-46f3-a51b-4bf99e62e463
-    health: HEALTH_WARN
-            Reduced data availability: 225 pgs inactive
-            Degraded data redundancy: 225 pgs undersized
+    id:     df435b16-6d53-4e4c-9497-4f1b7fd2f1a8
+    health: HEALTH_OK
+            (muted: POOL_NO_REDUNDANCY)
  
   services:
-    mon: 1 daemons, quorum localhost (age 36m)
-    mgr: localhost(active, starting, since 1.90691s)
-    osd: 3 osds: 3 up (since 35m), 3 in (since 35m)
+    mon: 1 daemons, quorum localhost (age 3h)
+    mgr: localhost(active, since 38m)
+    osd: 3 osds: 3 up (since 3h), 3 in (since 3h)
  
   data:
     pools:   8 pools, 225 pgs
     objects: 0 objects, 0 B
-    usage:   3.7 GiB used, 56 GiB / 60 GiB avail
-    pgs:     100.000% pgs not active
-             225 undersized+peered
+    usage:   3.0 GiB used, 57 GiB / 60 GiB avail
+    pgs:     225 active+clean
  
-[root@localhost ~]#
+[root@localhost ~]# 
 ```
 
 ```
