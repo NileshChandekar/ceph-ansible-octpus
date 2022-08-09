@@ -67,9 +67,10 @@ b) this will create mon and osd nodes, along with secondary disk 1 each to all o
 c) once the script is over you will below output like- 
 
 ```
-192.168.122.78     root-ceph-0
-192.168.122.51     root-ceph-1
-192.168.122.41     root-ceph-2
+192.168.200.14     root-ceph-mon-node-0
+192.168.200.11     root-ceph-osd-node-0
+192.168.200.15     root-ceph-osd-node-1
+192.168.200.20     root-ceph-osd-node-2
 ```
 
 d) then run [script link]()
