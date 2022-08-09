@@ -1,8 +1,12 @@
 #!/bin/bash
 
+
 user=$(id | awk '{print $1}' | sed 's/.*(//;s/)$//')
-for i in $(sudo virsh list --all | grep -i $user | awk {'print $2'} ) ; do virsh destroy $i ; done
-for i in $(sudo virsh list --all | grep -i $user | awk {'print $2'} ) ; do virsh undefine  $i ; done
+for i in $(sudo virsh list --all | grep -i $user | egrep -i "mon|osd" | awk {'print $2'} ) ; \
+  do virsh destroy $i ; done
+
+for i in $(sudo virsh list --all | grep -i $user | egrep -i "mon|osd" | awk {'print $2'} ) ; \
+  do virsh undefine  $i ; done
 
 rm -fr /openstack/images/deployceph/*
 
