@@ -58,7 +58,7 @@ TriggeredBy: ● docker.socket
 |Node Creation|
 |----|
 
-a) run bellow [script link](https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/scripts/ceph_infra_setup.sh)
+a) Run bellow [script link](https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/scripts/ceph_infra_setup.sh)
 
 
 b) this will create mon and osd nodes, along with secondary disk 1 each to all osd nodes. 
@@ -73,7 +73,7 @@ c) once the script is over you will below output like-
 192.168.200.20     root-ceph-osd-node-2
 ```
 
-d) then run [script link]()
+d) then run [script link](https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/scripts/container_create.sh)
 
 e) once the script executed, you will automatically get inside to container, 
 
@@ -87,6 +87,8 @@ g) this will create a ansible container [2.9] with prebuild ceph ansible reposit
 * stable-5.0
 (venv) root@afa1ddea1425:/usr/share/ceph-ansible# 
 ```
-h) Inside the container run the [script link]()
+h) Inside the container run the [script link](https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/scripts/inside_container.sh)
+
+i) Once the above execution completed, that means your Nodes Infra is ready and now we are ready to go for the Ceph deployment. 
 
 
