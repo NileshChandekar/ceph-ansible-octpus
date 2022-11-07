@@ -246,18 +246,23 @@ journal_collocation: true
 * Installation completed - 5-7 min. 
 
 ```
-PLAY RECAP **************************************************************************************************************************************************
-192.168.200.11             : ok=187  changed=30   unreachable=0    failed=0    skipped=450  rescued=0    ignored=1   
-192.168.200.14             : ok=119  changed=20   unreachable=0    failed=0    skipped=361  rescued=0    ignored=1   
-192.168.200.15             : ok=164  changed=27   unreachable=0    failed=0    skipped=424  rescued=0    ignored=1   
-192.168.200.20             : ok=171  changed=32   unreachable=0    failed=0    skipped=421  rescued=0    ignored=1   
-
-
-INSTALLER STATUS ********************************************************************************************************************************************
-Install Ceph Monitor           : Complete (0:00:14)
-Install Ceph Manager           : Complete (0:00:32)
-Install Ceph OSD               : Complete (0:01:28)
-Install Ceph Crash             : Complete (0:00:10)
+                                                                                                                                                                                                        
+PLAY RECAP
+***********************************************************************************************************************************
+192.168.122.81             : ok=113  changed=17   unreachable=0    failed=0    skipped=351  rescued=0    ignored=1                                                                                     
+192.168.122.87             : ok=125  changed=19   unreachable=0    failed=0    skipped=347  rescued=0    ignored=1                                                                                     
+192.168.122.90             : ok=120  changed=22   unreachable=0    failed=0    skipped=338  rescued=0    ignored=1                                                                                     
+192.168.122.91             : ok=172  changed=25   unreachable=0    failed=0    skipped=459  rescued=0    ignored=1                                                                                     
+                                                                                                                                                                                                        
+                                                                                                                                                                                                        
+INSTALLER STATUS
+***********************************************************************************************************************************
+Install Ceph Monitor           : Complete (0:00:19)                                                                                                                                                     
+Install Ceph Manager           : Complete (0:00:27)                                                                                                                                                     
+Install Ceph OSD               : Complete (0:01:52)                                                                                                                                                     
+Install Ceph Crash             : Complete (0:00:13)                                                                                                                                                     
+                                                                                                                                                                                                        
+Monday 07 November 2022  08:57:34 +0000 (0:00:00.047)       0:05:27.393 *******  
 
 ```
 
