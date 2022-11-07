@@ -6,4 +6,4 @@ apt install openssh-server -y
 apt install sshpass -y
 systemctl restart sshd
 systemctl status  sshd
-for host in $(cat ./ip.txt); do echo $host; sshpass -p 0 ssh-copy-id -o StrictHostKeyChecking=no  root@$host  ; done
+for host in $(cat /ip.txt); do echo $host; sshpass -p 0 ssh-copy-id -o StrictHostKeyChecking=no  root@$host  ; done
