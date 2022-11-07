@@ -1,12 +1,7 @@
 # ceph-ansible-octopus deployment on Centos-8
 
-<p align="center">
-  <img 
-    width="600"
-    height="300"
-    src="https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/images/octopus.png/600/300"
-  >
-</p>
+![image](https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/images/octopus.png)
+
 
 |Role|
 |----|
@@ -55,7 +50,7 @@ TriggeredBy: ● docker.socket
    Main PID: 206421 (dockerd)
 ```
 
-|Node Creation|
+|Mon and OSD Node Creation|
 |----|
 
 a) Run bellow [script link](https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/scripts/ceph_infra_setup.sh)
@@ -67,11 +62,26 @@ b) this will create mon and osd nodes, along with secondary disk 1 each to all o
 c) once the script is over you will below output like- 
 
 ```
-192.168.200.14     root-ceph-mon-node-0
-192.168.200.11     root-ceph-osd-node-0
-192.168.200.15     root-ceph-osd-node-1
-192.168.200.20     root-ceph-osd-node-2
+root@656e0cab7199:/# cat /hostentry.txt 
+hector-ceph-mon-node-0 192.168.122.91
+hector-ceph-osd-node-0 192.168.122.87
+hector-ceph-osd-node-1 192.168.122.81
+hector-ceph-osd-node-2 192.168.122.90
+root@656e0cab7199:/# 
 ```
+
+```
+root@656e0cab7199:/# cat /ip.txt 
+192.168.122.91
+192.168.122.87
+192.168.122.81
+192.168.122.90
+root@656e0cab7199:/# 
+
+```
+
+|Deployer Node Creation - I am using container as a deployer node|
+|----|
 
 d) then run [script link](https://github.com/NileshChandekar/ceph-ansible-octpus/blob/main/scripts/container_create.sh)
 
@@ -135,84 +145,96 @@ cat /hostentry.txt >> /etc/hosts
 * Create inventory
 
 ```
-(venv) root@8d13fd1af0a6:/usr/share/ceph-ansible# cat inventory.yml 
+root@656e0cab7199:/# cat /usr/share/ceph-ansible/inventory.yml 
 [mons]
-192.168.200.14
+192.168.122.91
+
 
 [mgrs]
-192.168.200.14
+192.168.122.91
+
 
 [osds]
-192.168.200.11
-192.168.200.15
-192.168.200.20
+192.168.122.87
+192.168.122.81
+192.168.122.90
 
-(venv) root@8d13fd1af0a6:/usr/share/ceph-ansible# 
+
+root@656e0cab7199:/# 
 ```
 
 * Check ping respone. 
 
 ```
-(venv) root@8d13fd1af0a6:/usr/share/ceph-ansible# ansible -i inventory.yml all -m ping 
-192.168.200.14 | SUCCESS => {
+(venv) root@656e0cab7199:/# ansible -i /usr/share/ceph-ansible/inventory.yml all -m ping 
+192.168.122.87 | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/libexec/platform-python"
     },
     "changed": false,
     "ping": "pong"
 }
-192.168.200.20 | SUCCESS => {
+192.168.122.91 | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/libexec/platform-python"
     },
     "changed": false,
     "ping": "pong"
 }
-192.168.200.15 | SUCCESS => {
+192.168.122.90 | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/libexec/platform-python"
     },
     "changed": false,
     "ping": "pong"
 }
-192.168.200.11 | SUCCESS => {
+192.168.122.81 | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/libexec/platform-python"
     },
     "changed": false,
     "ping": "pong"
 }
-(venv) root@8d13fd1af0a6:/usr/share/ceph-ansible# 
+(venv) root@656e0cab7199:/# 
 ```
 
 * Ceph config changes. ``(venv) root@8d13fd1af0a6:/usr/share/ceph-ansible# vi group_vars/all.yml``
 
 ```
-#### Added by Nilesh 
-
+(venv) root@656e0cab7199:/# cat /usr/share/ceph-ansible/group_vars/all.yml
+---
+dummy:
 ceph_origin: repository
 ceph_repository: community
 ceph_stable_release: octopus
-
-public_network: 192.168.200.0/24
-cluster_network: 192.168.100.0/24
-
-monitor_interface: eth1
-
+cephx: true
+generate_fasid: true
+journal_size: 1024
+public_network: 192.168.122.0/24
+cluster_network: 192.168.200.0/24
+monitor_interface: eth2
+monitor_address: 192.168.122.91
 dashboard_enabled: False
-
-ceph_conf_overrides:
+ceph_conf_overrides: 
   mon:
     mon_warn_on_insecure_global_id_reclaim_allowed: False
-
 openstack_config: true
+(venv) root@656e0cab7199:/# 
+
 ```
 
 * OSD map. ``(venv) root@8d13fd1af0a6:/usr/share/ceph-ansible# vi group_vars/osds.yml``
 
 ```
+(venv) root@656e0cab7199:/# cat /usr/share/ceph-ansible/group_vars/osds.yml
+---
+dummy:
 devices:
   - /dev/vdb
+  - /dev/vdc
+  - /dev/vdd
+journal_collocation: true    
+(venv) root@656e0cab7199:/# 
 ```
 
 * Start the deployment. 
@@ -237,78 +259,46 @@ Install Ceph Manager           : Complete (0:00:32)
 Install Ceph OSD               : Complete (0:01:28)
 Install Ceph Crash             : Complete (0:00:10)
 
-Tuesday 09 August 2022  11:06:49 +0000 (0:00:00.039)       0:04:15.920 ******** 
-=============================================================================== 
-ceph-common : install redhat ceph packages ---------------------------------------------------------------------------------------------------------- 67.18s
-ceph-osd : create openstack pool(s) ----------------------------------------------------------------------------------------------------------------- 25.24s
-ceph-osd : wait for all osd to be up ---------------------------------------------------------------------------------------------------------------- 11.46s
-install ceph-mgr packages on RedHat or SUSE ---------------------------------------------------------------------------------------------------------- 9.65s
-ceph-common : install centos dependencies ------------------------------------------------------------------------------------------------------------ 7.11s
-ceph-osd : generate keys ----------------------------------------------------------------------------------------------------------------------------- 6.29s
-ceph-osd : use ceph-volume lvm batch to create bluestore osds ---------------------------------------------------------------------------------------- 5.82s
-ceph-osd : get keys from monitors -------------------------------------------------------------------------------------------------------------------- 3.73s
-ceph-osd : copy ceph key(s) if needed ---------------------------------------------------------------------------------------------------------------- 3.41s
-gather and delegate facts ---------------------------------------------------------------------------------------------------------------------------- 3.04s
-ceph-infra : install chrony -------------------------------------------------------------------------------------------------------------------------- 2.95s
-ceph-osd : apply operating system tuning ------------------------------------------------------------------------------------------------------------- 2.86s
-ceph-osd : install dependencies ---------------------------------------------------------------------------------------------------------------------- 2.72s
-ceph-mon : fetch ceph initial keys ------------------------------------------------------------------------------------------------------------------- 2.54s
-ceph-mgr : create ceph mgr keyring(s) on a mon node -------------------------------------------------------------------------------------------------- 2.05s
-ceph-osd : set noup flag ----------------------------------------------------------------------------------------------------------------------------- 1.47s
-ceph-config : look up for ceph-volume rejected devices ----------------------------------------------------------------------------------------------- 1.43s
-ceph-facts : check if the ceph mon socket is in-use -------------------------------------------------------------------------------------------------- 1.39s
-ceph-facts : read osd pool default crush rule -------------------------------------------------------------------------------------------------------- 1.38s
-ceph-config : look up for ceph-volume rejected devices ----------------------------------------------------------------------------------------------- 1.36s
-(venv) root@8d13fd1af0a6:/usr/share/ceph-ansible# 
-```
-
-```
-for i in $(ceph df | awk {'print $1'} | awk "NR > 7") ; do ceph osd pool set $i size 1; done
-```
-
-```
-ceph health mute  POOL_NO_REDUNDANCY
 ```
 
 
 ```
-[root@localhost ~]# ceph -s 
+[root@hector-ceph-mon-node-0 ~]# ceph -s
   cluster:
-    id:     df435b16-6d53-4e4c-9497-4f1b7fd2f1a8
+    id:     b9db2ddd-41c0-4a67-8478-b40ee5b2de3c
     health: HEALTH_OK
-            (muted: POOL_NO_REDUNDANCY)
  
   services:
-    mon: 1 daemons, quorum localhost (age 3h)
-    mgr: localhost(active, since 38m)
-    osd: 3 osds: 3 up (since 3h), 3 in (since 3h)
+    mon: 1 daemons, quorum hector-ceph-mon-node-0 (age 26m)
+    mgr: hector-ceph-mon-node-0(active, since 25m)
+    osd: 9 osds: 9 up (since 24m), 9 in (since 24m)
  
   data:
     pools:   8 pools, 225 pgs
     objects: 0 objects, 0 B
-    usage:   3.0 GiB used, 57 GiB / 60 GiB avail
+    usage:   9.0 GiB used, 171 GiB / 180 GiB avail
     pgs:     225 active+clean
  
-[root@localhost ~]# 
+[root@hector-ceph-mon-node-0 ~]# 
 ```
 
 ```
-[root@localhost ~]# ceph df
+[root@hector-ceph-mon-node-0 ~]# ceph df
 --- RAW STORAGE ---
-CLASS  SIZE    AVAIL   USED     RAW USED  %RAW USED
-hdd    60 GiB  56 GiB  731 MiB   3.7 GiB       6.19
-TOTAL  60 GiB  56 GiB  731 MiB   3.7 GiB       6.19
+CLASS  SIZE     AVAIL    USED    RAW USED  %RAW USED
+hdd    180 GiB  171 GiB  50 MiB   9.0 GiB       5.03
+TOTAL  180 GiB  171 GiB  50 MiB   9.0 GiB       5.03
  
 --- POOLS ---
 POOL                   ID  PGS  STORED  OBJECTS  USED  %USED  MAX AVAIL
-device_health_metrics   1    1     0 B        0   0 B      0     18 GiB
-images                  2   32     0 B        0   0 B      0     18 GiB
-volumes                 3   32     0 B        0   0 B      0     18 GiB
-vms                     4   32     0 B        0   0 B      0     18 GiB
-backups                 5   32     0 B        0   0 B      0     18 GiB
-metrics                 6   32     0 B        0   0 B      0     18 GiB
-manila_data             7   32     0 B        0   0 B      0     18 GiB
-manila_metadata         8   32     0 B        0   0 B      0     18 GiB
-[root@localhost ~]# 
+device_health_metrics   1    1     0 B        0   0 B      0     54 GiB
+images                  2   32     0 B        0   0 B      0     54 GiB
+volumes                 3   32     0 B        0   0 B      0     54 GiB
+vms                     4   32     0 B        0   0 B      0     54 GiB
+backups                 5   32     0 B        0   0 B      0     54 GiB
+metrics                 6   32     0 B        0   0 B      0     54 GiB
+manila_data             7   32     0 B        0   0 B      0     54 GiB
+manila_metadata         8   32     0 B        0   0 B      0     54 GiB
+[root@hector-ceph-mon-node-0 ~]# 
 ```
 
